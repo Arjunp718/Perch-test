@@ -1,0 +1,26 @@
+name: Run Perch
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install packages
+        run: |
+          pip install --upgrade pip
+          pip install --upgrade opensoundscape bioacoustics-model-zoo tensorflow kagglehub pandas scikit-learn matplotlib
+      - name: Run Perch
+        run: python run_perch.py
+      - name: Save the plot
+        uses: actions/upload-artifact@v4
+        with:
+          name: perch-results
+          path: embeddings.png
